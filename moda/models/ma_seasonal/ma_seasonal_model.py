@@ -45,6 +45,18 @@ class MovingAverageSeasonalTrendinessDetector(AbstractTrendDetector):
         self.anomaly_type = anomaly_type
         self.min_periods = min_periods
 
+    def print_summary(self):
+        print("MA Seasonal Initialized with this params:")
+        print("freq = {}".format(self.freq))
+        print("is_multicategory = {}".format(self.is_multicategory))
+        print("num_of_std = {}".format(self.num_of_std))
+        print("seasonality = {}".format(self.seasonality))
+        print("min_value = {}".format(self.min_value))
+        print("anomaly_type = {}".format(self.anomaly_type))
+        print("resample = {}".format(self.resample))
+        print("min_periods = {}".format(self.min_periods))
+        print("lookback = {}".format(self.lookback))
+
     def fit_one_category(self, dataset, category=None, verbose=False):
         """Returns anomalies of the trend based on a k*sd heuristic
 
@@ -187,6 +199,10 @@ class MovingAverageSeasonalTrendinessDetector(AbstractTrendDetector):
             category_dataset = self.input_data[category]
         else:
             category_dataset = self.input_data['general']
+
+        if len(category_dataset) < 10:
+            print("Not enough samples to plot for category: {}".format(category))
+            return
 
         plt.subplot(421)
         ts_subplot(plt, category_dataset['value'], label='Original')
