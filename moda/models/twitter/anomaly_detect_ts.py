@@ -193,7 +193,7 @@ def anomaly_detect_ts(x, max_anoms=0.1, direction="pos", alpha=0.05, only_last=N
 
         all_data = []
         # Subset x into piecewise_median_period_weeks chunks
-        for i in range(1, data.size + 1, num_obs_in_period):
+        for i in range(1, data.size, num_obs_in_period):
             start_date = data.index[i]
             # if there is at least 14 days left, subset it, otherwise subset last_date - 14 days
             end_date = start_date + datetime.timedelta(days=num_days_in_period)
