@@ -47,6 +47,9 @@ class TwitterAnomalyTrendinessDetector(AbstractTrendDetector):
                 dataset_with_pred = pd.merge(dataset, anomalies, how='left', right_index=True, left_index=True)
 
             dataset_with_pred['prediction'] = np.where(np.isnan(dataset_with_pred['anomalies']), 0, 1)
+            expected = model_result['expected'].to_frame("expected")
+            expected = expected.groupby(expected.index).mean()
+            dataset_with_pred = pd.merge(dataset_with_pred, expected, how='left', left_index=True, right_index=True)
 
         except Exception as e:
             print(e)

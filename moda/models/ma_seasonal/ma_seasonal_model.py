@@ -132,7 +132,7 @@ class MovingAverageSeasonalTrendinessDetector(AbstractTrendDetector):
             residual > (results['residual_median'] + (results['residual_std'] * self.num_of_std)), 1, 0)
         results['trend_anomaly'] = np.where(trend > (results['trend_median'] + (results['trend_std'] * self.num_of_std)),
                                             1, 0)
-
+        results["expected"] = ts - residual
         if self.anomaly_type == 'or':
             results['prediction'] = (results['residual_anomaly'].values == 1) | (results['trend_anomaly'].values == 1)
         elif self.anomaly_type == 'trend':

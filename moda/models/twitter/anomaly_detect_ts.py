@@ -238,7 +238,7 @@ def anomaly_detect_ts(x, max_anoms=0.1, direction="pos", alpha=0.05, only_last=N
         seasonal_plus_trend = seasonal_plus_trend.append(shesd_stl)
 
     all_anoms.drop_duplicates(inplace=True)
-    seasonal_plus_trend.drop_duplicates(inplace=True)
+    seasonal_plus_trend.drop_duplicates()
 
     # -- If only_last was set by the user, create subset of the data that represent the most recent day
     if only_last:
@@ -320,7 +320,7 @@ def _detect_anoms(data, k=0.49, alpha=0.05, num_obs_per_period=None,
     # Note: R use stl, but here we will use MA, the result may be different TODO.. Here need improvement
     decomposed = sm.tsa.seasonal_decompose(data, freq=num_obs_per_period, two_sided=False)
     smoothed = data - decomposed.resid.fillna(0)
-    data = data - decomposed.seasonal - data.mean()
+    data = data - decomposed.seasonal - data.median()
 
     max_outliers = int(np.trunc(data.size * k))
     assert max_outliers, 'With longterm=TRUE, AnomalyDetection splits the data into 2 week periods by default. You have {0} observations in a period, which is too few. Set a higher piecewise_median_period_weeks.'.format(data.size)
